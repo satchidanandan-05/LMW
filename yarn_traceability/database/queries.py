@@ -42,3 +42,26 @@ SELECT_COB = text("""
 """)
 
 SELECT_CONE_ID_FOR_COB = text("SELECT cy_id FROM cob_traceability WHERE cob_id = :cob_id")
+
+# --- receive / master lookups -------------------------------------------------
+EXISTS_CONE = text("SELECT 1 FROM yarn_cone WHERE cy_id = :cy_id")
+EXISTS_COB = text("SELECT 1 FROM cob WHERE cob_id = :cob_id")
+SELECT_AUTOCONER_ACTIVE = text("SELECT is_active FROM autoconer WHERE autoconer_id = :autoconer_id")
+SELECT_DRUM_OWNER = text("SELECT autoconer_id FROM drum WHERE drum_id = :drum_id")
+SELECT_SPEEDFRAME_ACTIVE = text("SELECT is_active FROM speedframe WHERE speedframe_id = :speedframe_id")
+SELECT_SPINDLE_OWNER = text("SELECT speedframe_id FROM spindle WHERE spindle_id = :spindle_id")
+
+INSERT_CONE = text("""
+    INSERT INTO yarn_cone (cy_id, drum_id, cone_scan_datetime, receive_txn_id, created_by, created_at)
+    VALUES (:cy_id, :drum_id, :cone_scan_datetime, :receive_txn_id, :created_by, :created_at)
+""")
+
+INSERT_COB = text("""
+    INSERT INTO cob (cob_id, spindle_id, cob_scan_datetime, receive_txn_id, created_by, created_at)
+    VALUES (:cob_id, :spindle_id, :cob_scan_datetime, :receive_txn_id, :created_by, :created_at)
+""")
+
+INSERT_TRACE = text("""
+    INSERT INTO cob_traceability (cy_id, cob_id, receive_txn_id, created_at)
+    VALUES (:cy_id, :cob_id, :receive_txn_id, :created_at)
+""")
