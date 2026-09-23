@@ -65,3 +65,34 @@ INSERT_TRACE = text("""
     INSERT INTO cob_traceability (cy_id, cob_id, receive_txn_id, created_at)
     VALUES (:cy_id, :cob_id, :receive_txn_id, :created_at)
 """)
+
+# --- users / master data ------------------------------------------------------
+SELECT_USER_BY_USERNAME = text("""
+    SELECT user_id, username, password_hash, role, status FROM users WHERE username = :username
+""")
+LIST_USERS = text("SELECT user_id, username, role, status FROM users ORDER BY user_id")
+INSERT_USER = text("""
+    INSERT INTO users (username, password_hash, role) VALUES (:username, :password_hash, :role)
+""")
+DISABLE_USER = text("UPDATE users SET status = 'disabled' WHERE user_id = :user_id")
+
+LIST_AUTOCONERS = text("""
+    SELECT autoconer_id, machine_name, is_active FROM autoconer
+    WHERE (:active_only = 0 OR is_active = 1) ORDER BY autoconer_id
+""")
+LIST_DRUMS = text("""
+    SELECT drum_id, autoconer_id FROM drum
+    WHERE (:autoconer_id IS NULL OR autoconer_id = :autoconer_id) ORDER BY drum_id
+""")
+LIST_SPEEDFRAMES = text("""
+    SELECT speedframe_id, machine_name, is_active FROM speedframe
+    WHERE (:active_only = 0 OR is_active = 1) ORDER BY speedframe_id
+""")
+LIST_SPINDLES = text("""
+    SELECT spindle_id, speedframe_id FROM spindle
+    WHERE (:speedframe_id IS NULL OR speedframe_id = :speedframe_id) ORDER BY spindle_id
+""")
+INSERT_AUTOCONER = text("INSERT INTO autoconer (autoconer_id, machine_name) VALUES (:autoconer_id, :machine_name)")
+INSERT_DRUM = text("INSERT INTO drum (drum_id, autoconer_id) VALUES (:drum_id, :autoconer_id)")
+INSERT_SPEEDFRAME = text("INSERT INTO speedframe (speedframe_id, machine_name) VALUES (:speedframe_id, :machine_name)")
+INSERT_SPINDLE = text("INSERT INTO spindle (spindle_id, speedframe_id) VALUES (:spindle_id, :speedframe_id)")
