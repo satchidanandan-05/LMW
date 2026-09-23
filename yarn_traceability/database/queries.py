@@ -16,3 +16,29 @@ SELECT_RECENT_AUDIT = text("""
     ORDER BY a.audit_id DESC
     LIMIT :limit
 """)
+
+# --- traceability ------------------------------------------------------------
+SELECT_CONE = text("""
+    SELECT yc.cy_id, d.autoconer_id, yc.drum_id, yc.cone_scan_datetime
+    FROM yarn_cone yc
+    JOIN drum d ON d.drum_id = yc.drum_id
+    WHERE yc.cy_id = :cy_id
+""")
+
+SELECT_COBS_FOR_CONE = text("""
+    SELECT c.cob_id, s.speedframe_id, c.spindle_id, c.cob_scan_datetime
+    FROM cob_traceability ct
+    JOIN cob c ON c.cob_id = ct.cob_id
+    JOIN spindle s ON s.spindle_id = c.spindle_id
+    WHERE ct.cy_id = :cy_id
+    ORDER BY c.cob_scan_datetime, c.cob_id
+""")
+
+SELECT_COB = text("""
+    SELECT c.cob_id, s.speedframe_id, c.spindle_id, c.cob_scan_datetime
+    FROM cob c
+    JOIN spindle s ON s.spindle_id = c.spindle_id
+    WHERE c.cob_id = :cob_id
+""")
+
+SELECT_CONE_ID_FOR_COB = text("SELECT cy_id FROM cob_traceability WHERE cob_id = :cob_id")
