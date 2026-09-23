@@ -4,13 +4,14 @@ import streamlit as st
 import config
 from database.database import get_engine, is_initialized
 from services.auth_service import has_role
-from ui import login, search
+from ui import login, receive, search
 
 st.set_page_config(page_title="Yarn Traceability", page_icon="🧵", layout="wide")
 
 # (page key, title, icon, render function). Order = sidebar order; the first allowed page is the landing page.
 PAGES = [
     ("search", "Search", ":material/search:", search.render),
+    ("receive", "Receive", ":material/add_box:", receive.render),
 ]
 
 
