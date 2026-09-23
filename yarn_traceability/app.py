@@ -4,7 +4,7 @@ import streamlit as st
 import config
 from database.database import get_engine, is_initialized
 from services.auth_service import has_role
-from ui import login, receive, search
+from ui import admin, login, receive, report, search
 
 st.set_page_config(page_title="Yarn Traceability", page_icon="🧵", layout="wide")
 
@@ -12,6 +12,8 @@ st.set_page_config(page_title="Yarn Traceability", page_icon="🧵", layout="wid
 PAGES = [
     ("search", "Search", ":material/search:", search.render),
     ("receive", "Receive", ":material/add_box:", receive.render),
+    ("report", "Report", ":material/description:", report.render),
+    ("admin", "Admin", ":material/settings:", admin.render),
 ]
 
 
