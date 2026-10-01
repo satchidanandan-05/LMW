@@ -96,3 +96,14 @@ INSERT_AUTOCONER = text("INSERT INTO autoconer (autoconer_id, machine_name) VALU
 INSERT_DRUM = text("INSERT INTO drum (drum_id, autoconer_id) VALUES (:drum_id, :autoconer_id)")
 INSERT_SPEEDFRAME = text("INSERT INTO speedframe (speedframe_id, machine_name) VALUES (:speedframe_id, :machine_name)")
 INSERT_SPINDLE = text("INSERT INTO spindle (spindle_id, speedframe_id) VALUES (:spindle_id, :speedframe_id)")
+
+# --- dataset import -------------------------------------------------------------
+IMPORT_AUTOCONER = text("""
+    INSERT INTO autoconer (autoconer_id, machine_name, is_active) VALUES (:autoconer_id, :machine_name, :is_active)
+""")
+IMPORT_SPEEDFRAME = text("""
+    INSERT INTO speedframe (speedframe_id, machine_name, is_active) VALUES (:speedframe_id, :machine_name, :is_active)
+""")
+IMPORT_USER = text("""
+    INSERT INTO users (username, password_hash, role, status) VALUES (:username, :password_hash, :role, :status)
+""")

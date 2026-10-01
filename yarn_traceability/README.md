@@ -16,6 +16,26 @@ copy .env.example .env            # optional; the defaults work as-is
 .venv/Scripts/python -m streamlit run app.py
 ```
 
+## Loading the real dataset
+
+To replace the demo data with the plant dataset, put `Yarn_Traceability_Dataset_Package.zip` in `data/` and run:
+
+```bash
+.venv/Scripts/python scripts/import_dataset.py            # or --source path/to/file.xlsx
+```
+
+This rebuilds `data/traceability.db` from the Excel sheets and writes `data/import_report.txt`, which lists every
+repair, rejected row and skipped row. Rows that break the app's rules are not loaded:
+
+- **A COB linked to more than one cone:** only the first link (lowest `Trace_ID`) is loaded.
+- **A cone whose drum is missing from the Drum sheet:** the drum is created on the cone's autoconer, and this is noted.
+- **A COB not linked to any cone:** it has no scan time, so it is skipped.
+- **Machines:** an autoconer or speedframe that is not `Running` is imported as inactive.
+- **Roles:** Administrator → admin, Production User → operator, Quality User and Supervisor → supervisor.
+
+Dataset users log in with the password `<username>123`, for example `production01` / `production01123`.
+The demo accounts below are also kept. Run `scripts/init_db.py --reset` to go back to the demo data.
+
 ## Demo accounts
 
 | Username | Password | Role | Pages |
