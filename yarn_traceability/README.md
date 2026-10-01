@@ -43,6 +43,34 @@ Input is trimmed and uppercased automatically.
 8. Only the term "COB" is used throughout. (AC-11)
 9. Database errors show a friendly message; see `test_database_error_returns_error_status`. Details go to `logs/app.log`. (AC-12)
 
+## Checking the database
+
+The database is a single SQLite file, `data/traceability.db`. It is created by `scripts/init_db.py` and is git-ignored.
+
+- **VS Code:** install the **SQLite Viewer** extension (by Florian Klampfer), then click `data/traceability.db` to browse each table.
+- **Desktop app:** open the file in [DB Browser for SQLite](https://sqlitebrowser.org/). Use *Browse Data* to view tables and *Execute SQL* to run queries.
+- **Terminal (no install needed):** run any query through the project's Python:
+
+  ```bash
+  .venv/Scripts/python -c "import sqlite3, pandas as pd; print(pd.read_sql('SELECT * FROM yarn_cone', sqlite3.connect('data/traceability.db')))"
+  ```
+
+  To list each cone with its COBs:
+
+  ```sql
+  SELECT ct.cy_id, c.cob_id, s.speedframe_id, c.spindle_id, c.cob_scan_datetime
+  FROM cob_traceability ct
+  JOIN cob c ON c.cob_id = ct.cob_id
+  JOIN spindle s ON s.spindle_id = c.spindle_id
+  ORDER BY ct.cy_id
+  ```
+
+- **In the app:** log in as **admin** and use the **Admin** page to see machines, users and the audit log.
+
+Tables: `yarn_cone`, `cob`, `cob_traceability` (which COB is in which cone), `autoconer`, `drum`, `speedframe`, `spindle`, `users`, `audit_log`. The full definitions are in `sql/schema.sql`.
+
+Close any viewer that has the file open before running `scripts/init_db.py --reset`, because Windows cannot delete a file that is in use.
+
 ## Tests
 
 ```bash
